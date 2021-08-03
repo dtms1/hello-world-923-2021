@@ -1,11 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from config import db
-from usuario import Usuario
+from controller.usuario import usuario_blueprint
 
-TEMPLATES = "./templates"
+TEMPLATES = "./view"
 STATIC = "./static"
 
-app = Flask(__name__, template_folder=TEMPLATES, static_folder=STATIC)
+app = Flask(__name__, static_url_path='', template_folder=TEMPLATES, static_folder=STATIC)
+app.register_blueprint(usuario_blueprint)
 
 # Configuração do Banco de Dados
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///./dados.db'
@@ -18,33 +19,17 @@ with app.app_context():
 
 @app.route('/')
 def helloWorld():
-    return render_template('cadastroUsuario.html')
+    return render_template('login.html')
+
+@app.route('/login', methods={'POST'})
+def login():
+    return render_template('index.html')
 
 @app.route('/index')
 def index():
     nome = 'Flávio'
     mostrarVideos = True
     lista = ['https://www.youtube.com/embed/vU3RHRELdCE', 'https://www.youtube.com/embed/uUUYv_T1dEs', 'https://www.youtube.com/embed/n3tMEOw9KGY']
-    return render_template('index.html', nome=nome, lista=lista, mostrarVideos=mostrarVideos)
+    return render_template('hello-world.html', nome=nome, lista=lista, mostrarVideos=mostrarVideos)
 
-@app.route('/cadastrarUsuario', methods=['POST'])
-def cadastrarUsuario():
-    nome = request.form.get('nome')
-    email = request.form.get('email')
-
-    usuarios = Usuario.query.all()
-    for u in usuarios:
-        if u.email == email:
-            return 'Email já cadastrado!'
-
-    usuario = Usuario(nome, email)
-    db.session.add(usuario)
-    db.session.commit()
-    return 'Usuário cadastrado com sucesso!'
-
-@app.route('/consultarUsuarios')
-def consultarUsuarios():
-    usuarios = Usuario.query.all()
-    return render_template('listarUsuarios.html', usuarios=usuarios)
-
-#app.run(host="0.0.0.0", port=5000)
+app.run(host="0.0.0.0", port=5000)
