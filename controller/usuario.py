@@ -25,4 +25,8 @@ def cadastrarUsuario():
 @usuario_blueprint.route('/consultarUsuarios')
 def consultarUsuarios():
     usuarios = Usuario.query.all()
-    return render_template('listarUsuarios.html', usuarios=usuarios)
+    return render_template('index.html', usuarios=usuarios)
+
+@usuario_blueprint.route('/usuarios/form')
+def abrirCadastroUsuario():
+    return render_template('cadastrarUsuario.html')
