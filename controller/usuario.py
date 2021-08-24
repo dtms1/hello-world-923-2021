@@ -57,6 +57,7 @@ def alterarUsuario():
     user.email = email
 
     db.session.commit()
+
     if user:
         return 'Usuario alterado'
         
