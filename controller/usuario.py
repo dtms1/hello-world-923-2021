@@ -58,7 +58,5 @@ def alterarUsuario():
 
     db.session.commit()
 
-    if user:
-        return 'Usuario alterado'
-        
-    return 'Usuario alterado'
+    usuarios = Usuario.query.all()
+    return render_template('index.html', usuarios=usuarios)
