@@ -36,13 +36,20 @@ def deletarUser(id):
     user = Usuario.query.filter_by(id=id).first()
     db.session.delete(user)
     db.session.commit()
-    if user:
-        return 'Usuario deletado'
 
-    return 'Usuario não existe'
+    usuarios = Usuario.query.all()
+    return render_template('index.html', usuarios=usuarios)
+
+@usuario_blueprint.route('/user/<int:id>')
+def user(id):
+    user = Usuario.query.filter_by(id=id).first()
+
+    return render_template('userform.html', usuario=user)
+
+
 
 @usuario_blueprint.route('/updateuser', methods=['POST'])
-def updateUser(id):
+def updateUser():
     nome = request.form.get('nome')
     email = request.form.get('email')
     id = request.form.get('id')
