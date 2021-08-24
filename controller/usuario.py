@@ -45,8 +45,6 @@ def user(id):
     user = Usuario.query.filter_by(id=id).first()
     return render_template('userform.html', usuario=user)
 
-
-
 @usuario_blueprint.route('/alterarUsuario', methods=['POST'])
 def alterarUsuario():
     nome = request.form.get('nome')
