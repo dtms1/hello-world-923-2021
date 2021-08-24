@@ -31,3 +31,29 @@ def consultarUsuarios():
 def abrirCadastroUsuario():
     return render_template('cadastrarUsuario.html')
 
+@usuario_blueprint.route('/deleteuser/<int:id>')
+def deletarUser(id):
+    user = Usuario.query.filter_by(id=id).first()
+    db.session.delete(user)
+    db.session.commit()
+    if user:
+        return 'Usuario deletado'
+
+    return 'Usuario não existe'
+
+@usuario_blueprint.route('/updateuser', methods=['POST'])
+def updateUser(id):
+    nome = request.form.get('nome')
+    email = request.form.get('email')
+    id = request.form.get('id')
+
+    user = Usuario.query.filter_by(id=id).first()
+
+    user.nome = nome
+    user.email = email
+
+    db.session.commit()
+    if user:
+        return 'Usuario alterado'
+        
+    return 'Usuario alterado'
